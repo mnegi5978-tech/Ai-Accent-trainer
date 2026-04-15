@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Accent Trainer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero-panel">
+        <div>
+          <p class="eyebrow">Accent Trainer</p>
+          <h1>Improve English pronunciation with AI feedback.</h1>
+          <p class="hero-copy">
+            Practice daily sentences, record your voice, and receive instant accuracy scores,
+            pronunciation tips, and corrected audio playback.
+          </p>
+        </div>
+        <div class="hero-summary">
+          <div class="hero-card">
+            <span>Daily Practice</span>
+            <strong>{{ daily_sentence.difficulty | capitalize }}</strong>
+            <p>{{ daily_sentence.sentence }}</p>
+          </div>
+          <div class="hero-card">
+            <span>Progress</span>
+            <strong>{{ progress.practice_count }} sessions</strong>
+            <p>Best score: {{ progress.best_score }}%</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="trainer-grid">
+        <aside class="sidebar-card">
+          <div class="card">
+            <h2>Choose a sentence</h2>
+            <label>
+              Difficulty level
+              <select id="difficultySelect">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </label>
+
+            <label>
+              Practice sentence
+              <select id="sentenceSelect"></select>
+            </label>
+
+            <label>
+              Or type your own sentence
+              <textarea id="sentenceInput" rows="3">{{ daily_sentence.sentence }}</textarea>
+            </label>
+
+            <div class="mic-panel">
+              <button id="startBtn" class="mic-btn">🎤 Start Speaking</button>
+              <span id="recordState">Ready to record</span>
+            </div>
+          </div>
+
+          <div class="card progress-card">
+            <h3>Progress Tracker</h3>
+            <div class="progress-stat">
+              <span>Sessions</span>
+              <strong>{{ progress.practice_count }}</strong>
+            </div>
+            <div class="progress-stat">
+              <span>Best score</span>
+              <strong>{{ progress.best_score }}%</strong>
+            </div>
+            <div class="history-list">
+              <h4>Recent attempts</h4>
+              {% if progress.history %}
+                <ul>
+                  {% for item in progress.history %}
+                    <li>{{ item.date }} — {{ item.score }}%</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p>No sessions yet. Start speaking to track progress.</p>
+              {% endif %}
+            </div>
+          </div>
+        </aside>
+
+        <main class="analysis-card">
+          <div class="card result-card">
+            <div class="result-header">
+              <div>
+                <span class="subheading">Result</span>
+                <h2>Your pronunciation score</h2>
+              </div>
+              <div class="score-badge" id="accuracyValue">%</div>
+            </div>
+
+            <div class="result-body">
+              <div class="result-row">
+                <strong>Transcribed text</strong>
+                <p id="transcriptText">Your spoken sentence will appear here.</p>
+              </div>
+              <div class="result-row">
+                <strong>Mispronounced words</strong>
+                <p id="mistakeText">No mistakes yet.</p>
+              </div>
+              <div class="result-row">
+                <strong>Feedback</strong>
+                <p id="tipText">Record your voice to get a pronunciation tip.</p>
+              </div>
+            </div>
+
+            <div class="analysis-highlights" id="analysisHtml">
+              <p class="hint">The sentence highlights correct words in green and errors in red.</p>
+            </div>
+
+            <div class="audio-actions">
+              <button id="replayBtn" class="secondary-btn" disabled>Play correct pronunciation</button>
+            </div>
+          </div>
+        </main>
+      </section>
+    </div>
+
+    <script>
+      const practiceData = {{ practice_sentences | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

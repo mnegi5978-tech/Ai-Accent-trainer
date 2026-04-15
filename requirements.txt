@@ -1,0 +1,4 @@
+Flask>=2.3
+SpeechRecognition>=3.8
+gTTS>=2.3
+pyttsx3>=2.90

@@ -1,0 +1,18 @@
+# Python environment
+.venv/
+
+# Bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Audio output files
+static/audio/
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
